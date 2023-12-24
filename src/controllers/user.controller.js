@@ -1,6 +1,7 @@
+// import { mongoose } from "mongoose";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
-import { User } from "../models/user-models.js"
+import { User } from "../models/user.models.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
@@ -17,7 +18,7 @@ const registerUser = asyncHandler( async (req, res) => {
      // 8) return response
 
      const { fullName, email, username, password} = req.body;
-     console.log("email: " + email);
+     // console.log("email: " + email);
 
      if(
           [fullName, email, username, password].some( (field) => field?.trim()=== "")
@@ -25,7 +26,7 @@ const registerUser = asyncHandler( async (req, res) => {
           throw new ApiError(400, "All fields is required");
      }
 
-     const existedUser = User.findOne({
+     const existedUser = await User.findOne({
           $or: [{username}, {email}]
      })
 
